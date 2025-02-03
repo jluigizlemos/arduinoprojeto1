@@ -1,0 +1,39 @@
+const int pinoSensorTemp = A0;
+const int pinoVentoinha = 9;
+const int pinoLedEmergencia = 10;
+const int pinoBuzina = 11;
+
+void setup() {
+  pinMode(pinoSensorTemp, INPUT);
+  pinMode(pinoVentoinha, OUTPUT);
+  pinMode(pinoLedEmergencia, OUTPUT);
+  pinMode(pinoBuzina, OUTPUT);
+  
+  Serial.begin(9600);
+}
+
+void loop() {
+  int valorSensor = analogRead(pinoSensorTemp);
+  
+  float temperatura = (valorSensor * 5.0 / 1024.0) * 100.0;
+  
+  Serial.print("Temperatura: ");
+  Serial.print(temperatura);
+  Serial.println(" °C");
+  
+  if (temperatura >= 30.0) {
+    digitalWrite(pinoVentoinha, HIGH);
+  } else {
+    digitalWrite(pinoVentoinha, LOW);
+  }
+  
+  if (temperatura > 50.0) {
+    digitalWrite(pinoLedEmergencia, HIGH);
+    tone(pinoBuzina, 1000, 500);
+  } else {
+    digitalWrite(pinoLedEmergencia, LOW);
+    noTone(pinoBuzina);
+  }
+  
+  delay(1000);
+}
